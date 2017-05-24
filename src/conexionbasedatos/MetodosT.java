@@ -16,18 +16,6 @@ import javax.swing.table.DefaultTableModel;
  * @author Adry
  */
 public class MetodosT {
-    public static void conectarT(){
-        Connection c = null;
-        Statement stmt = null;
-        try{
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:prueba.db");
-        }catch(Exception e){
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-            System.out.println("Base de datos abierta exitosamente");
-    }
     public static void mostrarDatosT(){
          Connection c = null;
          Statement stmt = null;
@@ -59,4 +47,32 @@ public class MetodosT {
         }
          System.out.println("Base cargada completamente");
 }
-}
+    public static void añadirT(){
+        String tDni =Ventana.dniText.getText();
+        String tNombre =Ventana.nombreText.getText();
+        int tEdad =Integer.parseInt(Ventana.edadBox.getSelectedItem().toString());
+        String tDireccion =Ventana.direcionText.getText();
+        float tSalario =Float.parseFloat(Ventana.salarioText.getText());
+
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:prueba.db");
+            c.setAutoCommit(false);
+            System.out.println("Base de datos abierta exitosamente");
+
+            stmt = c.createStatement();
+            String sql = "INSERT INTO COMPANIA (DNI,NOMBRE,EDAD,DIRECION,SALARIO) " + "VALUES (" + "'" + tDni + "'," + "'" + tNombre + "'," + tEdad + ",'" + tDireccion + "'," + tSalario + ");";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.commit();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Insercion realizada con exito");
+    }
+    }
+    

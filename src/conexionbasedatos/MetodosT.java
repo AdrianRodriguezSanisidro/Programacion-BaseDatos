@@ -81,5 +81,33 @@ public class MetodosT {
         MetodosT.mostrarDatosT();
         System.out.println("Insercion realizada con exito");
     }
+    public static void eliminarFila(){
+        Connection c = null;
+        Statement stmt = null;
+        
+        int linea = Ventana.jTable1.getSelectedRow();
+        Object bDni = Ventana.jTable1.getValueAt(linea, 0);
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:prueba.db");
+            c.setAutoCommit(false);
+            System.out.println("Base de datos abierta exitosamente");
+
+            stmt = c.createStatement();
+            String sql = "DELETE from COMPANIA where DNI='" + bDni + "';";
+            stmt.executeUpdate(sql);
+            c.commit();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        DefaultTableModel modelo=(DefaultTableModel) Ventana.jTable1.getModel();
+        modelo.removeRow(Ventana.jTable1.getSelectedRow());
+        System.out.println("Borrado realizado con exito");
     }
+    
+    }
+    
     

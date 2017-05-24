@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -72,6 +73,12 @@ public class MetodosT {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
+        DefaultTableModel modelo=(DefaultTableModel) Ventana.jTable1.getModel();
+         for (int i = 0; i < Ventana.jTable1.getRowCount(); i++) {
+           modelo.removeRow(i);
+           i-=1;
+       }
+        MetodosT.mostrarDatosT();
         System.out.println("Insercion realizada con exito");
     }
     }

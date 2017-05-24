@@ -41,7 +41,7 @@ public class Metodos {
                     + "(DNI TEXT PRIMARY KEY     NOT NULL,"
                     + "NOMBRE           TEXT    NOT NULL,"
                     + "EDAD            INT     NOT NULL, "
-                    + "DIRECCION        TEXT, "
+                    + "DIRECION        TEXT, "
                     + "SALARIO        REAL)";
             stmt.executeUpdate(sql);
             stmt.close();

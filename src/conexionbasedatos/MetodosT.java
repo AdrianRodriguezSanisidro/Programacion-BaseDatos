@@ -50,9 +50,13 @@ public class MetodosT {
                 modelo.addRow(fila);
                 Ventana.jTable1.setModel(modelo);
             }
+            rs.close();
+            stmt.close();
+            c.close();
     }catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
+         System.out.println("Base cargada completamente");
 }
 }

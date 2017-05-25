@@ -135,6 +135,13 @@ public class MetodosT {
             Ventana.salarioText.setText(""+Ventana.jTable1.getValueAt(Ventana.jTable1.getSelectedRow(), 4));
         }
     }
+    public static void limpiarTabla(){
+        Ventana.dniText.setText("");
+        Ventana.nombreText.setText("");
+        Ventana.salarioText.setText("");
+        Ventana.direcionText.setText("");
+        Ventana.edadBox.setSelectedIndex(0);
+    }
     }
     
     

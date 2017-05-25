@@ -8,7 +8,10 @@ package conexionbasedatos;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,18 +28,17 @@ public class MetodosT {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:prueba.db");
             c.setAutoCommit(false);
-            System.out.println("Base de datos abierta exitosamente");
             
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM COMPANIA;");
             while(rs.next()){
-                Object[] fila=new Object[5];
-                fila[0]=rs.getString("dni");
-                fila[1]=rs.getString("nombre");
-                fila[2]=rs.getInt("edad");
-                fila[3]=rs.getString("direcion");
-                fila[4]=rs.getFloat("salario");
-                modelo.addRow(fila);
+                Object[] linea=new Object[5];
+                linea[0]=rs.getString("dni");
+                linea[1]=rs.getString("nombre");
+                linea[2]=rs.getInt("edad");
+                linea[3]=rs.getString("direcion");
+                linea[4]=rs.getFloat("salario");
+                modelo.addRow(linea);
                 Ventana.jTable1.setModel(modelo);
             }
             rs.close();
@@ -46,7 +48,6 @@ public class MetodosT {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-         System.out.println("Base cargada completamente");
 }
     public static void añadirT(){
         String tDni =Ventana.dniText.getText();
@@ -61,7 +62,6 @@ public class MetodosT {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:prueba.db");
             c.setAutoCommit(false);
-            System.out.println("Base de datos abierta exitosamente");
 
             stmt = c.createStatement();
             String sql = "INSERT INTO COMPANIA (DNI,NOMBRE,EDAD,DIRECION,SALARIO) " + "VALUES (" + "'" + tDni + "'," + "'" + tNombre + "'," + tEdad + ",'" + tDireccion + "'," + tSalario + ");";
@@ -85,13 +85,11 @@ public class MetodosT {
         Connection c = null;
         Statement stmt = null;
         
-        int linea = Ventana.jTable1.getSelectedRow();
-        Object bDni = Ventana.jTable1.getValueAt(linea, 0);
+        String bDni = (String) Ventana.jTable1.getValueAt(Ventana.jTable1.getSelectedRow(), 0);
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:prueba.db");
             c.setAutoCommit(false);
-            System.out.println("Base de datos abierta exitosamente");
 
             stmt = c.createStatement();
             String sql = "DELETE from COMPANIA where DNI='" + bDni + "';";
@@ -107,7 +105,37 @@ public class MetodosT {
         modelo.removeRow(Ventana.jTable1.getSelectedRow());
         System.out.println("Borrado realizado con exito");
     }
-    
+    public static void actualizarCambios(){
+            Connection c = null;
+            Statement stmt = null;
+            try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:prueba.db");
+            c.setAutoCommit(false);
+            
+            String bDni=Ventana.dniText.getText();
+            stmt = c.createStatement();
+            String sql = "DELETE from COMPANIA where DNI='" + bDni + "';";
+            stmt.executeUpdate(sql);
+            c.commit();
+            MetodosT.añadirT();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        }
+    public static void seleccionarLinea(){
+        if(Ventana.jTable1.getSelectedRow()!=-1){
+            Ventana.dniText.setText( (String) Ventana.jTable1.getValueAt(Ventana.jTable1.getSelectedRow(), 0));
+            Ventana.nombreText.setText((String) Ventana.jTable1.getValueAt(Ventana.jTable1.getSelectedRow(), 1));
+            Ventana.edadBox.setSelectedIndex(((int)(Ventana.jTable1.getValueAt(Ventana.jTable1.getSelectedRow(), 2)))-18);
+            Ventana.direcionText.setText((String) Ventana.jTable1.getValueAt(Ventana.jTable1.getSelectedRow(), 3));
+            Ventana.salarioText.setText(""+Ventana.jTable1.getValueAt(Ventana.jTable1.getSelectedRow(), 4));
+        }
     }
+    }
+    
     
     
